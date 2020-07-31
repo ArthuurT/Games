@@ -1,9 +1,15 @@
-var http = require('http');
-var markdown = require('markdown').markdown;
+var express = require('express');
+var sudoku = require('sudoku')
 
-var server = http.createServer(function(req, res) {
-  res.writeHead(200);
-  res.end(markdown.toHTML('Bienvenue sur la page **Games** !'));
+
+var app = express();
+
+app.get('/', function(req, res) {
+    res.send(sudoku.makepuzzle().toString());
 });
 
-server.listen(8080);
+app.use(function(req, res, next){
+    res.status(404).send('Page introuvable !');
+});
+
+app.listen(8080);

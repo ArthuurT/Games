@@ -1,6 +1,7 @@
 {
     "dependencies": {
         "express": "^4.17.1",
-        "markdown": "^0.5.0"
+        "markdown": "^0.5.0",
+        "sudoku": "0.0.3"
     }
 }
