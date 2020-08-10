@@ -1,11 +1,10 @@
 var express = require('express');
-var sudoku = require('sudoku')
 
 
 var app = express();
 
-app.get('/', function(req, res) {
-    res.send(sudoku.makepuzzle().toString());
+app.get('/scores', function(req, res) {
+    res.send('Salut');
 });
 
 app.use(function(req, res, next){

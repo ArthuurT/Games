@@ -1,0 +1,28 @@
+#home{
+    height:100%;
+    width: 100%;
+    background-image: url("../../../assets/basketball-court.jpg");
+    filter: grayscale(70%);
+    text-align: center;
+}
+
+p{
+    color:rgb(238, 232, 232);
+    font-style: italic;
+    font-size: 100px;
+    padding-top: 23%;
+    font-family: 'Open Sans', sans-serif;
+}
+
+#games-list{
+    margin-top: 80px;
+    padding-left:0px;
+}
+
+.btn {
+    margin: 5px;
+    min-width: 175px;
+    font-family: 'Open Sans', sans-serif;
+}
+
+
