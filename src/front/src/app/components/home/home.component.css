@@ -1,4 +1,4 @@
-#home{
+#home {
     height:100%;
     width: 100%;
     background-image: url("../../../assets/basketball-court.jpg");
@@ -6,7 +6,7 @@
     text-align: center;
 }
 
-p{
+p {
     color:rgb(238, 232, 232);
     font-style: italic;
     font-size: 100px;
@@ -14,7 +14,7 @@ p{
     font-family: 'Open Sans', sans-serif;
 }
 
-#games-list{
+#games-list {
     margin-top: 80px;
     padding-left:0px;
 }
@@ -23,6 +23,11 @@ p{
     margin: 5px;
     min-width: 175px;
     font-family: 'Open Sans', sans-serif;
+    font-style: italic;
+}
+
+#dragon-icon {
+    padding-right: 10px;
 }
 
 

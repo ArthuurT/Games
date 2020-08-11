@@ -3,8 +3,16 @@
     <p>GAMES.</p>
 
     <ul id="games-list">
-        <li *ngFor="let game of games">
-            <button type="button" class="btn btn-secondary btn-md">{{game}}</button>
+        <li>
+            <button type="button" class="btn btn-secondary btn-md" (click)="redirectToSnake()">
+                <fa-icon id="dragon-icon" [icon]="faDragon"></fa-icon>
+                SNAKE
+            </button>
+        </li>
+        <li>
+            <button type="button" class="btn btn-secondary btn-md" disabled>
+                NON DISPONIBLE
+            </button>
         </li>
     </ul>
     

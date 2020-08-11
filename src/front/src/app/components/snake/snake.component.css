@@ -1,0 +1,37 @@
+#snake {
+    height:100%;
+    width: 100%;
+    background-image: url("../../../assets/wood.jpg");
+    background-size: 100%;
+    text-align: center;
+}
+
+#canvas-snake {
+    border:4px solid rgb(238, 232, 232);
+    height: 400px;
+    width: 400px;
+    margin: 0 auto;
+    margin-top: 100px;
+    background-color: rgb(63, 78, 92);
+}
+
+#title {
+    padding-top: 100px;
+}
+
+p {
+    color:rgb(238, 232, 232);
+    font-style: italic;
+    font-size: 100px;
+    font-family: 'Open Sans', sans-serif;
+}
+
+#back-icon {
+    padding-right: 10px;
+}
+
+#back-button {
+    position : absolute;
+    left : 0px;
+    margin: 10px;
+}

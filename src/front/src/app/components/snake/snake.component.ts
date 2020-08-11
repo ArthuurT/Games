@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { Router } from '@angular/router';
+
+declare function snakeGame(): any;
 
 @Component({
   selector: 'app-snake',
@@ -7,9 +11,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SnakeComponent implements OnInit {
 
-  constructor() { }
+  constructor(private router : Router) { }
 
   ngOnInit(): void {
+    snakeGame();
   }
 
+  redirectToHome(){
+    this.router.navigate(['']);
+  }
+
+  faArrowLeft = faArrowLeft;
 }
