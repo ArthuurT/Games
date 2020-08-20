@@ -1,22 +1,23 @@
 var strokeWidth = '2';
 var gridSize = 10;
 
+var AUTO = 0;
+var MANUEL = 1;
+
 function snakeGame(){
 
   var width = $('#canvas-snake').width()
   var height = $('#canvas-snake').height()
   var cellWidth = width/gridSize - (strokeWidth/gridSize)
   var cellHeight = height/gridSize - (strokeWidth/gridSize)
-
   var stage = new Konva.Stage({
     container: 'canvas-snake',
     width: width,
     height: height,
   });
-
   var layer = new Konva.Layer();
 
-  var createRect = function(posx,posy,color){
+  function createRect(posx,posy,color){
       var rect = new Konva.Rect({
         x: cellWidth * posx + (strokeWidth / 2),
         y: cellHeight * posy + (strokeWidth / 2),
@@ -35,50 +36,90 @@ function snakeGame(){
     return posx > 0 && posx + stroke < width && posy > 0 && posy + stroke < height;
   }
 
+  function Timer(fn, t) {
+    var timerObj = setInterval(fn, t);
+
+    this.stop = function() {
+        if (timerObj) {
+            clearInterval(timerObj);
+            timerObj = null;
+        }
+        return this;
+    }
+
+    this.start = function() {
+        if (!timerObj) {
+            this.stop();
+            timerObj = setInterval(fn, t);
+        }
+        return this;
+    }
+
+    this.reset = function(newT = t) {
+        t = newT;
+        return this.stop().start();
+    }
+  }
+
+  function Board(){
+  }
+
   function Snake(posx,posy){
     this.speedx = 0;
     this.speedy = 0;
     this.head = createRect(posx,posy,'green');
     this.body = [createRect(posx,posy+1,'white'),createRect(posx,posy+2,'white'),createRect(posx,posy+3,'white'),createRect(posx,posy+4,'white')];
-    this.mooveTop = function(){
-      if(isValidCell(this.head.attrs.x,this.head.attrs.y - cellHeight)){
+    this.mooveTop = function(type){
+      if(isValidCell(this.head.attrs.x,this.head.attrs.y - cellHeight) && (this.speedy !== -1 || type === 0)){
         if(this.body.length != 0){
-          this.mooveBody()
+          this.mooveBody();
         }
-        this.head.move({x : 0, y: -cellHeight})
+        this.head.move({x : 0, y: -cellHeight});
+        this.speedy = -1;
+        this.speedx = 0;
+        timer.reset();
         if(this.isDead()){
           this.clearBody();
         }
       }
     };
-    this.mooveBottom = function(){
-      if(isValidCell(this.head.attrs.x,this.head.attrs.y + cellHeight)){
+    this.mooveBottom = function(type){
+      if(isValidCell(this.head.attrs.x,this.head.attrs.y + cellHeight) && (this.speedy !== 1 || type === 0)){
         if(this.body.length != 0){
-          this.mooveBody()
+          this.mooveBody();
         }
-        this.head.move({x : 0, y: +cellHeight})
+        this.head.move({x : 0, y: +cellHeight});
+        this.speedy = 1;
+        this.speedx = 0;
+        timer.reset();
         if(this.isDead()){
           this.clearBody();
         }
       }
     };
-    this.mooveLeft = function(){
-      if(isValidCell(this.head.attrs.x - cellWidth,this.head.attrs.y)){
+    this.mooveLeft = function(type){
+      if(isValidCell(this.head.attrs.x - cellWidth,this.head.attrs.y)  && (this.speedx !== -1 || type === 0)){
         if(this.body.length != 0){
-          this.mooveBody()
+          this.mooveBody();
         }
-        this.head.move({x : -cellWidth, y: 0})
+        this.head.move({x : -cellWidth, y: 0});
+        this.speedy = 0;
+        this.speedx = -1;
+        timer.reset();
         if(this.isDead()){
           this.clearBody();
         }
       }
     };
-    this.mooveRight = function(){
-      if(isValidCell(this.head.attrs.x + cellWidth,this.head.attrs.y)){
+    this.mooveRight = function(type){
+      if(isValidCell(this.head.attrs.x + cellWidth,this.head.attrs.y)  && (this.speedx !== 1 || type === 0)){
         if(this.body.length != 0){
-          this.mooveBody()
+          this.mooveBody();
         }
-        this.head.move({x : +cellWidth, y: 0})
+        this.head.move({x : +cellWidth, y: 0});
+        this.speedy = 0;
+        this.speedx = 1;
+        timer.reset();
         if(this.isDead()){
           this.clearBody();
         }
@@ -104,32 +145,31 @@ function snakeGame(){
         position.destroy();
       });
       this.body = [];
+      this.speedx = 0;
+      this.speedy = 0;
     }
   }
-
-  var snake = new Snake(3,3);
-  stage.add(layer);
 
   document.onkeydown = function(e) {
     switch(e.which) {
         case 37: // left
-        snake.mooveLeft();
-        layer.batchDraw()
+        snake.mooveLeft(MANUEL);
+        layer.batchDraw();
         break;
 
         case 38: // up
-        snake.mooveTop();
-        layer.batchDraw()
+        snake.mooveTop(MANUEL);
+        layer.batchDraw();
         break;
 
         case 39: // right
-        snake.mooveRight();
-        layer.batchDraw()
+        snake.mooveRight(MANUEL);
+        layer.batchDraw();
         break;
 
         case 40: // down
-        snake.mooveBottom();
-        layer.batchDraw()
+        snake.mooveBottom(MANUEL);
+        layer.batchDraw();
         break;
 
         default: return; // exit this handler for other keys
@@ -137,12 +177,25 @@ function snakeGame(){
     e.preventDefault(); // prevent the default action (scroll / move caret)
   };
 
-  /*  
+
+  /* Program */
+
+  var snake = new Snake(3,3);
+  stage.add(layer);
   
-  setInterval(function(){
-      snake.print();
-      snake.mooveTop();
-  },2000) 
+  var timer = new Timer(function(){
+    if(snake.speedx === 1){
+      snake.mooveRight(AUTO);
+    }else if(snake.speedx === -1){
+      snake.mooveLeft(AUTO);
+    }else if(snake.speedy === 1){
+      snake.mooveBottom(AUTO);
+    }else if(snake.speedy === -1){
+      snake.mooveTop(AUTO);
+    }
+    layer.batchDraw();
+  },500);
+  
+  timer.start();
     
-  */
 }
